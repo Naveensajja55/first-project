@@ -1,0 +1,54 @@
+{
+    "variables": {
+        "aws_access_key": "AKIAY4YQZ5OJ3DODUCVS",
+        "aws_secret_key": "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",
+        "source_ami": "ami-0cc87e5027adcdca8",
+        "date_stamp": "",
+        "name": ""
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "ami_block_device_mappings": [
+                {
+                    "device_name": "/dev/xvda",
+                    "volume_type": "gp2",
+                    "volume_size": "20"
+                }
+            ],
+            "ssh_pty": true,
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "vpc_id": "vpc-04e4421375d267691",
+            "subnet_id": "subnet-09339720a571dc864",
+            "region": "us-east-2c",
+            "source_ami": "{{user `source_ami`}}",
+            "instance_type": "t2.micro",
+            "security_group_id": "sg-0e6e59ecb40096482",
+            "ami_name": "{{user `name`}}_{{user `date_stamp`}}",
+            "ami_regions": "us-east-2",
+            "ssh_username": "ec2-user",
+            "run_tags": {
+                "ChargeCode": "name",
+                "Product": "infracoe.packer",
+                "Role": "Packer"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "sudo yum upgrade kernel -y",
+                "sudo yum install -y yum-utils",
+                "sudo yum install git -y"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo yum install wget -y"
+            ]
+        }
+    ]
+}
